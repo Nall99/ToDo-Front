@@ -1,1 +1,58 @@
-<p>tarefas-lista works!</p>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Listagem de tarefas</h3>
+                    <div class="direita">
+                        <button type="button" class="btn btn-primary btn-rounded" mdbRipple (click)="adicionarTarefa()">
+                            Novo
+                        </button>
+                    </div>
+                    <br>
+                    <table class="table table-striped" border="1">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Titulo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (tarefa of lista; track $index) {
+                                <tr>
+                                    <td>{{ tarefa.id }}</td>
+                                    <td>{{ tarefa.titulo }}</td>
+
+                                    <td class="direita">
+                                        <button type="button" class="btn btn-primary btn-rounded" mdbRipple (click)="editar(tarefa)">Editar</button> 
+                                        <button type="button" class="btn btn-danger btn-rounded" mdbRipple (click)="excluir(tarefa)">Deletar</button> 
+                                    </td>
+                                </tr>
+                            }
+                                
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<ng-template #modalTarefaDetalhe>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cadastro</h5>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modalRef.close()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <app-tarefas-detalhe (retorno)="retornoDetalhe($event)"></app-tarefas-detalhe>
+      </div>
+</ng-template>
