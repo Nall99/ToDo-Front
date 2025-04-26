@@ -51,8 +51,8 @@
           aria-label="Close"
           (click)="modalRef.close()"
         ></button>
-      </div>
-      <div class="modal-body">
-        <app-tarefas-detalhe (retorno)="retornoDetalhe($event)"></app-tarefas-detalhe>
-      </div>
+    </div>
+    <div class="modal-body">
+        <app-tarefas-detalhe [tarefa]="tarefaEdit" (retorno)="retornoDetalhe($event)"></app-tarefas-detalhe>
+    </div>
 </ng-template>

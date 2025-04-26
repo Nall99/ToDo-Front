@@ -21,26 +21,30 @@ export class TarefasListaComponent {
 
   
   constructor() { 
-    this.lista = [
-      new Tarefa(1, 'Tarefa 1', 'Descrição da tarefa 1', new Date(), new Date(), 'Pendente'),
-      new Tarefa(2, 'Tarefa 2', 'Descrição da tarefa 2', new Date(), new Date(), 'Concluída'),
-      new Tarefa(3, 'Tarefa 3', 'Descrição da tarefa 3', new Date(), new Date(), 'Pendente')
-    ];
+    
     let tarefaNova = history.state.tarefaNova;
     let tarefaEditada = history.state.tarefaEditada;
 
-    if (tarefaNova) {
+
+    if (tarefaNova != null) {
       this.lista.push(tarefaNova);
-    }else if (tarefaEditada) {
+    }
+    if (tarefaEditada != null) {
       let index = this.lista.findIndex(t => t.id == tarefaEditada.id);
       if (index > 0) {
         this.lista[index] = tarefaEditada;
       }
     }
+
+    this.lista = [
+      new Tarefa(1, 'Tarefa 1', 'Descrição da tarefa 1', new Date(), null, 'Pendente'),
+      new Tarefa(2, 'Tarefa 2', 'Descrição da tarefa 2', new Date(), null, 'Concluída'),
+      new Tarefa(3, 'Tarefa 3', 'Descrição da tarefa 3', new Date(), null, 'Pendente')
+    ];
   }
 
   adicionarTarefa() {
-    this.tarefaEdit = new Tarefa(0, '', '', new Date(), new Date(), '');
+    this.tarefaEdit = new Tarefa(0, '', '', new Date(), null, '');
     this.modalRef = this.modalService.open(this.modalTarefaDetalhe);
   }
   editar(tarefa: Tarefa) {
@@ -71,7 +75,9 @@ export class TarefasListaComponent {
   }
   retornoDetalhe(tarefa: Tarefa) {
     let index = this.lista.findIndex(t => t.id == tarefa.id);
-    if (index > 0) {
+    console.log(index);
+    if (index >= 0) {
+      tarefa.atualizadoEm = new Date();
       this.lista[index] = tarefa;
     }
     else {

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
 import Swal from 'sweetalert2';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-tarefas-detalhe',
@@ -13,7 +14,7 @@ import Swal from 'sweetalert2';
   styleUrl: './tarefas-detalhe.component.scss'
 })
 export class TarefasDetalheComponent {
-  tarefa: Tarefa = new Tarefa(0, '', '', new Date(), new Date(), '');
+  @Input() tarefa: Tarefa = new Tarefa(0, '', '', new Date(), null, '');
   @Output() retorno = new EventEmitter<any>();
 
   router = inject(ActivatedRoute);
@@ -49,5 +50,12 @@ export class TarefasDetalheComponent {
       this.router2.navigate(['principal/tarefas'], {state: {tarefaNova: this.tarefa}});
     }
     this.retorno.emit(this.tarefa)
+  }
+
+  formatarData(data: Date): string {
+    if (data == null) {
+      return '---';
+    }
+    return formatDate(data, 'dd/MM/yyyy HH:mm', 'en-US');
   }
 }
