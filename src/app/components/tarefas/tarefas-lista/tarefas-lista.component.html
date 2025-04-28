@@ -1,45 +1,139 @@
 <br>
 <div class="container">
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-4">
             <div class="card">
                 <div class="card-body">
-                    <h3>Listagem de tarefas</h3>
+                    <h3>A fazer</h3>
                     <div class="direita">
                         <button type="button" class="btn btn-primary btn-rounded" mdbRipple (click)="adicionarTarefa()">
                             Novo
                         </button>
                     </div>
                     <br>
-                    <table class="table table-striped" border="1">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Titulo</th>
-                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             @for (tarefa of lista; track $index) {
                                 <tr>
-                                    <td>{{ tarefa.id }}</td>
                                     <td>{{ tarefa.titulo }}</td>
-
+                                    
                                     <td class="direita">
-                                        <button type="button" class="btn btn-primary btn-rounded" mdbRipple (click)="editar(tarefa)">Editar</button> 
-                                        <button type="button" class="btn btn-danger btn-rounded" mdbRipple (click)="excluir(tarefa)">Deletar</button> 
+                                        <div mdbDropdown class="dropend">
+                                            <button
+                                              class="btn btn-link btn-rounded dropdown-toggle"
+                                              type="button"
+                                              id="dropdownMenuButton"
+                                              aria-expanded="false"
+                                              mdbDropdownToggle
+                                            >
+                                            </button>
+                                            <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li><button type="button" class="dropdown-item" mdbRipple (click)="editar(tarefa)">Editar</button> </li>
+                                                <li><button type="button" class="dropdown-item" style="color: red;" mdbRipple (click)="excluir(tarefa)">Deletar</button> </li>
+                                            </ul>
+                                          </div>
                                     </td>
                                 </tr>
-                            }
-                                
+                            } 
                         </tbody>
                     </table>
                 </div>
             </div>
-
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Fazendo</h3>
+                    <div class="direita">
+                        <button type="button" class="btn btn-primary btn-rounded" mdbRipple (click)="adicionarTarefa()">
+                            Novo
+                        </button>
+                    </div>
+                    <br>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Titulo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (tarefa of lista; track $index) {
+                                <tr>
+                                    <td>{{ tarefa.titulo }}</td>
+                                    
+                                    <td class="direita">
+                                        <div mdbDropdown class="dropend">
+                                            <button
+                                              class="btn btn-link btn-rounded dropdown-toggle"
+                                              type="button"
+                                              id="dropdownMenuButton"
+                                              aria-expanded="false"
+                                              mdbDropdownToggle
+                                            >
+                                            </button>
+                                            <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li><button type="button" class="dropdown-item" mdbRipple (click)="editar(tarefa)">Editar</button> </li>
+                                                <li><button type="button" class="dropdown-item" style="color: red;" mdbRipple (click)="excluir(tarefa)">Deletar</button> </li>
+                                            </ul>
+                                          </div>
+                                    </td>
+                                </tr>
+                            } 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Finalizado</h3>
+                    <div class="direita">
+                        <button type="button" class="btn btn-primary btn-rounded" mdbRipple (click)="adicionarTarefa()">
+                            Novo
+                        </button>
+                    </div>
+                    <br>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Titulo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (tarefa of lista; track $index) {
+                                <tr>
+                                    <td>{{ tarefa.titulo }}</td>
+                                    
+                                    <td class="direita">
+                                        <div mdbDropdown class="dropend">
+                                            <button
+                                              class="btn btn-link btn-rounded dropdown-toggle"
+                                              type="button"
+                                              id="dropdownMenuButton"
+                                              aria-expanded="false"
+                                              mdbDropdownToggle
+                                            >
+                                            </button>
+                                            <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li><button type="button" class="dropdown-item" mdbRipple (click)="editar(tarefa)">Editar</button> </li>
+                                                <li><button type="button" class="dropdown-item" style="color: red;" mdbRipple (click)="excluir(tarefa)">Deletar</button> </li>
+                                            </ul>
+                                          </div>
+                                    </td>
+                                </tr>
+                            } 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-
 </div>
 
 <ng-template #modalTarefaDetalhe>

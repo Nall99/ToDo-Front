@@ -3,11 +3,12 @@ import { Tarefa } from '../../../models/tarefa';
 import { TarefasDetalheComponent } from '../tarefas-detalhe/tarefas-detalhe.component';
 import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import Swal from 'sweetalert2';
+import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
 
 @Component({
   selector: 'app-tarefas-lista',
   standalone: true,
-  imports: [TarefasDetalheComponent, MdbModalModule],
+  imports: [TarefasDetalheComponent, MdbModalModule, MdbDropdownModule],
   templateUrl: './tarefas-lista.component.html',
   styleUrl: './tarefas-lista.component.scss'
 })
