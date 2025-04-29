@@ -4,6 +4,7 @@ import { TarefasDetalheComponent } from '../tarefas-detalhe/tarefas-detalhe.comp
 import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import Swal from 'sweetalert2';
 import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tarefas-lista',
@@ -14,14 +15,19 @@ import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
 })
 export class TarefasListaComponent {
   lista: Tarefa[] = [] 
+  statusLista: string[] = ['A fazer', 'Fazendo', 'Concluído'];
   tarefaEdit: Tarefa = new Tarefa(0, '', '', new Date(), new Date(), '');
 
+  atualDragTarefa!: Tarefa;
+  statusPag!: string; 
+
+  routter = inject(Router);
   modalService = inject(MdbModalService);
   @ViewChild('modalTarefaDetalhe') modalTarefaDetalhe!: TemplateRef<any>;
   modalRef!: MdbModalRef<any>;
 
   
-  constructor() { 
+  constructor(public router: Router) { 
     
     let tarefaNova = history.state.tarefaNova;
     let tarefaEditada = history.state.tarefaEditada;
@@ -38,14 +44,26 @@ export class TarefasListaComponent {
     }
 
     this.lista = [
-      new Tarefa(1, 'Tarefa 1', 'Descrição da tarefa 1', new Date(), null, 'Pendente'),
-      new Tarefa(2, 'Tarefa 2', 'Descrição da tarefa 2', new Date(), null, 'Concluída'),
-      new Tarefa(3, 'Tarefa 3', 'Descrição da tarefa 3', new Date(), null, 'Pendente')
+      new Tarefa(1, 'Tarefa 1', 'Descrição da tarefa 1', new Date(), null, 'A fazer'),
+      new Tarefa(2, 'Tarefa 2', 'Descrição da tarefa 2', new Date(), null, 'Fazendo'),
+      new Tarefa(3, 'Tarefa 3', 'Descrição da tarefa 3', new Date(), null, 'Concluído')
     ];
+
+    if (router.url.includes('tarefas/a-fazer')) {
+      this.statusPag = 'A fazer';
+    }
+    else if (router.url.includes('tarefas/fazendo')) {
+      this.statusPag = 'Fazendo';
+    }
+    else if (router.url.includes('tarefas/concluido')) {
+      this.statusPag = 'Concluído';
+    }else {
+      this.statusPag = 'tarefas';
+    }
   }
 
-  adicionarTarefa() {
-    this.tarefaEdit = new Tarefa(0, '', '', new Date(), null, '');
+  adicionarTarefa(status: string) {
+    this.tarefaEdit = new Tarefa(0, '', '', new Date(), null, status);
     this.modalRef = this.modalService.open(this.modalTarefaDetalhe);
   }
   editar(tarefa: Tarefa) {
@@ -86,5 +104,19 @@ export class TarefasListaComponent {
       this.lista.push(tarefa);
     }
     this.modalRef.close();
+  }
+  onDragStart(tarefa: Tarefa) {
+    this.atualDragTarefa = tarefa;
+  }
+  onDrop(event: any, status: string) {
+    this.atualDragTarefa.status = status
+  }
+  onDragOver(event: any) {
+    event.preventDefault();
+  }
+  removerDaLista(status: string){
+    const index = this.statusLista.findIndex(s => s === status)
+    this.statusLista.splice(index, 1);
+    console.log(this.statusLista);
   }
 }
