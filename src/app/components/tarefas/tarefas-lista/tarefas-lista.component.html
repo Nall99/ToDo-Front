@@ -3,7 +3,7 @@
     <div class="row">
         @if (statusPag == 'tarefas') {
             @for( status of statusLista; track status){
-                <div class="col-lg-4" (dragover)="onDragOver($event)" (drop)="onDrop($event, status)">
+                <div class="col-lg-4" (dragover)="onDragOver($event, status)" (drop)="onDrop($event, status)">
                     <div class="card">
                         <div class="card-body">
                             <h3>{{ status }}</h3>
@@ -19,6 +19,13 @@
                                 <tbody>
                                     @for (tarefa of lista; track $index) {
                                         @if (tarefa.status == status) {
+                                            <!-- Placeholder antes do item quando estiver arrastando -->
+                                            @if (atualStatus === status && posicaoSombra === $index) {
+                                                <tr class="drop-placeholder">
+                                                    <td colspan="2">Solte aqui</td>
+                                                </tr>
+                                            }
+                                            
                                             <tr (dragstart)="onDragStart(tarefa)" draggable="true">
                                                 <td>{{ tarefa.titulo }}</td>
                                                 
@@ -40,7 +47,13 @@
                                                 </td>
                                             </tr>
                                         }
-                                    } 
+                                    }
+                                    <!-- Placeholder no final da lista -->
+                                    @if (atualStatus === status && posicaoSombra === null) {
+                                        <tr class="drop-placeholder">
+                                            <td colspan="2">Solte aqui</td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -63,15 +76,17 @@
                                 <tr>
                                     <th>titulo</th>
                                     <th>Descrição</th>
+                                    <th>Ultima Atualização</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @for (tarefa of lista; track $index) {
                                     @if (tarefa.status == statusPag) {
-                                        <tr (dragstart)="onDragStart(tarefa)" draggable="true">
+                                        <tr>
                                             <td>{{ tarefa.titulo }}</td>
                                             <td>{{ tarefa.descricao }}</td>
+                                            <td>{{ formatarData(tarefa.atualizadoEm) }}</td>
                                             
                                             <td class="direita">
                                                 <button type="button" class="btn btn-primary btn-rounded" mdbRipple (click)="editar(tarefa)">

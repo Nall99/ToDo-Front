@@ -5,6 +5,7 @@ import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit
 import Swal from 'sweetalert2';
 import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
 import { Router } from '@angular/router';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-tarefas-lista',
@@ -20,6 +21,10 @@ export class TarefasListaComponent {
 
   atualDragTarefa!: Tarefa;
   statusPag!: string; 
+
+  // Variáveis para drag and drop
+  atualStatus: string | null = null;
+  posicaoSombra: number | null = null;
 
   routter = inject(Router);
   modalService = inject(MdbModalService);
@@ -108,15 +113,33 @@ export class TarefasListaComponent {
   onDragStart(tarefa: Tarefa) {
     this.atualDragTarefa = tarefa;
   }
-  onDrop(event: any, status: string) {
-    this.atualDragTarefa.status = status
-  }
-  onDragOver(event: any) {
+  onDragOver(event: DragEvent, status: string) {
     event.preventDefault();
+    this.atualStatus = status;
+    this.posicaoSombra = null;
   }
-  removerDaLista(status: string){
-    const index = this.statusLista.findIndex(s => s === status)
-    this.statusLista.splice(index, 1);
-    console.log(this.statusLista);
+  onDragLeave(status: string) {
+      if (this.atualStatus === status) {
+          this.atualStatus = null;
+          this.posicaoSombra = null;
+      }
   }
+  onDrop(event: DragEvent, status: string) {
+      event.preventDefault();
+      this.atualStatus = null;
+      this.posicaoSombra = null;
+      const index = this.lista.findIndex(t => t.id === this.atualDragTarefa.id);
+      if (index !== -1) {
+          this.lista[index].status = status;
+          this.atualDragTarefa.status = status;
+          const tarefa = this.lista.splice(index, 1)[0];
+          this.lista.push(tarefa);
+      }
+  }
+  formatarData(data: Date): string {
+      if (data == null) {
+        return '---';
+      }
+      return formatDate(data, 'dd/MM/yyyy HH:mm', 'en-US');
+    }
 }

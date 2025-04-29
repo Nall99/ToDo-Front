@@ -39,7 +39,15 @@ export class TarefasDetalheComponent {
         icon: 'success',
         confirmButtonText: 'OK'
       });
-      this.router2.navigate(['principal/tarefas'], {state: {tarefaEditada: this.tarefa}});
+      let rota!: string;
+      if (this.router2.url.includes('tarefas/a-fazer')) {
+        rota = 'principal/tarefas/a-fazer';
+      }else if (this.router2.url.includes('tarefas/fazendo')) {
+        rota = 'principal/tarefas/fazendo';
+      }else if (this.router2.url.includes('tarefas/concluido')) {
+        rota = 'principal/tarefas/concluido';
+      }
+      this.router2.navigate([rota], {state: {tarefaEditada: this.tarefa}});
     }else{
       Swal.fire({
         title: 'Sucesso!',
@@ -47,7 +55,15 @@ export class TarefasDetalheComponent {
         icon: 'success',
         confirmButtonText: 'OK'
       });
-      this.router2.navigate(['principal/tarefas'], {state: {tarefaNova: this.tarefa}});
+      let rota!: string;
+      if (this.router2.url.includes('tarefas/a-fazer')) {
+        rota = 'principal/tarefas/a-fazer';
+      }else if (this.router2.url.includes('tarefas/fazendo')) {
+        rota = 'principal/tarefas/fazendo';
+      }else if (this.router2.url.includes('tarefas/concluido')) {
+        rota = 'principal/tarefas/concluido';
+      }
+      this.router2.navigate([rota], {state: {tarefaNova: this.tarefa}});
     }
     this.retorno.emit(this.tarefa)
   }

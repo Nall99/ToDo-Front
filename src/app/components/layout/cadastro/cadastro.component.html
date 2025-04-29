@@ -1,1 +1,46 @@
-<p>cadastro works!</p>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4"></div>
+    <div class="col-lg-4 centralizar topo">
+        <div class="card">
+            <div class="card-body">
+                <h3>Autentique-se</h3>
+                <br>
+                <mdb-form-control>
+                    <input mdbInput type="text" id="usuario" class="form-control" [(ngModel)]="nome"/>
+                    <label mdbLabel class="form-label" for="usuario">Nome</label>
+                </mdb-form-control>
+                <br>
+                <mdb-form-control>
+                    <input mdbInput type="text" id="senha" class="form-control" [(ngModel)]="email"/>
+                    <label mdbLabel class="form-label" for="senha">Email</label>
+                </mdb-form-control>
+                <br>
+                <mdb-form-control>
+                    <input mdbInput type="password" id="senha" class="form-control" [(ngModel)]="senha"/>
+                    <label mdbLabel class="form-label" for="senha">Senha</label>
+                </mdb-form-control>
+                <br>
+                <mdb-form-control>
+                    <input mdbInput type="password" id="senha" class="form-control" [(ngModel)]="confirmarSenha"/>
+                    <label mdbLabel class="form-label" for="senha">Confirmar senha</label>
+                </mdb-form-control>
+                <br>
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-6">
+                        <button type="button" class="btn btn-primary btn-rounded" mdbRipple (click)="cadastrar()">Acessar</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <a href="/login" class="text-decoration-none">Já sou cadastrado</a>
+                    </div>
+                </div>
+            </div>
+          </div>
+    </div>
+    <div class="col-lg-4"></div>
+    </div>
+    
+
+</div>
