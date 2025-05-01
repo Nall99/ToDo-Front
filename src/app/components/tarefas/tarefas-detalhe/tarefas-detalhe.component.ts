@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
 import Swal from 'sweetalert2';
 import { formatDate } from '@angular/common';
+import { TarefaService } from '../../../services/tarefa.service';
 
 @Component({
   selector: 'app-tarefas-detalhe',
@@ -20,6 +21,8 @@ export class TarefasDetalheComponent {
   router = inject(ActivatedRoute);
   router2 = inject(Router)
 
+  tarefaService = inject(TarefaService);
+
   constructor() {
     let id = this.router.snapshot.params['id'];
     if (id > 0) {
@@ -27,43 +30,74 @@ export class TarefasDetalheComponent {
     }
   }
   buscarPorID(id: number){
-    let tarefaRetornada: Tarefa = new Tarefa(3, 'teste', 'testando o teste', new Date(), new Date(), ''); 
-    this.tarefa = tarefaRetornada;
+    this.tarefaService.buscarPorId(id).subscribe({
+      next: (tarefa) => {
+        this.tarefa = tarefa;
+      },
+      error: (err) => {
+        Swal.fire({
+          title: 'Erro!',
+          text: 'Erro ao buscar a tarefa.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
   }
 
   salvar() {
     if(this.tarefa.id > 0){
-      Swal.fire({
-        title: 'Sucesso!',
-        text: 'A tarefa foi editada com sucesso.',
-        icon: 'success',
-        confirmButtonText: 'OK'
+      this.tarefaService.atualizar(this.tarefa, this.tarefa.id).subscribe({
+        next: (mensagem) => {
+          Swal.fire({
+            title: mensagem,
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+          let rota!: string;
+          if (this.router2.url.includes('tarefas/a-fazer')) {
+            rota = 'principal/tarefas/a-fazer';
+          }else if (this.router2.url.includes('tarefas/fazendo')) {
+            rota = 'principal/tarefas/fazendo';
+          }else if (this.router2.url.includes('tarefas/concluido')) {
+            rota = 'principal/tarefas/concluido';
+          }
+          this.router2.navigate([rota], {state: {tarefaEditada: this.tarefa}});
+        },
+        error: (err) => {
+          Swal.fire({
+            title: 'Erro ao editar a tarefa',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
       });
-      let rota!: string;
-      if (this.router2.url.includes('tarefas/a-fazer')) {
-        rota = 'principal/tarefas/a-fazer';
-      }else if (this.router2.url.includes('tarefas/fazendo')) {
-        rota = 'principal/tarefas/fazendo';
-      }else if (this.router2.url.includes('tarefas/concluido')) {
-        rota = 'principal/tarefas/concluido';
-      }
-      this.router2.navigate([rota], {state: {tarefaEditada: this.tarefa}});
     }else{
-      Swal.fire({
-        title: 'Sucesso!',
-        text: 'A tarefa foi criada com sucesso.',
-        icon: 'success',
-        confirmButtonText: 'OK'
+      this.tarefaService.salvar(this.tarefa).subscribe({
+        next: (mensagem) => {
+          Swal.fire({
+            title: mensagem,
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+          let rota!: string;
+          if (this.router2.url.includes('tarefas/a-fazer')) {
+            rota = 'principal/tarefas/a-fazer';
+          }else if (this.router2.url.includes('tarefas/fazendo')) {
+            rota = 'principal/tarefas/fazendo';
+          }else if (this.router2.url.includes('tarefas/concluido')) {
+            rota = 'principal/tarefas/concluido';
+          }
+          this.router2.navigate([rota], {state: {tarefaCriada: this.tarefa}});
+        },
+        error: (err) => {
+          Swal.fire({
+            title: 'Erro ao criar a tarefa',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
       });
-      let rota!: string;
-      if (this.router2.url.includes('tarefas/a-fazer')) {
-        rota = 'principal/tarefas/a-fazer';
-      }else if (this.router2.url.includes('tarefas/fazendo')) {
-        rota = 'principal/tarefas/fazendo';
-      }else if (this.router2.url.includes('tarefas/concluido')) {
-        rota = 'principal/tarefas/concluido';
-      }
-      this.router2.navigate([rota], {state: {tarefaNova: this.tarefa}});
     }
     this.retorno.emit(this.tarefa)
   }
