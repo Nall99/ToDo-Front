@@ -15,7 +15,7 @@ import { TarefaService } from '../../../services/tarefa.service';
   styleUrl: './tarefas-detalhe.component.scss'
 })
 export class TarefasDetalheComponent {
-  @Input() tarefa: Tarefa = new Tarefa(0, '', '', new Date(), null, '');
+  @Input() tarefa: Tarefa = new Tarefa();
   @Output() retorno = new EventEmitter<any>();
 
   router = inject(ActivatedRoute);
@@ -61,8 +61,11 @@ export class TarefasDetalheComponent {
             rota = 'principal/tarefas/fazendo';
           }else if (this.router2.url.includes('tarefas/concluido')) {
             rota = 'principal/tarefas/concluido';
+          }else{
+            rota = 'principal/tarefas';
           }
-          this.router2.navigate([rota], {state: {tarefaEditada: this.tarefa}});
+          this.retorno.emit(this.tarefa)
+          this.router2.navigate([rota]);
         },
         error: (err) => {
           Swal.fire({
@@ -87,8 +90,11 @@ export class TarefasDetalheComponent {
             rota = 'principal/tarefas/fazendo';
           }else if (this.router2.url.includes('tarefas/concluido')) {
             rota = 'principal/tarefas/concluido';
+          }else{
+            rota = 'principal/tarefas';
           }
-          this.router2.navigate([rota], {state: {tarefaCriada: this.tarefa}});
+          this.retorno.emit(this.tarefa)
+          this.router2.navigate([rota]);
         },
         error: (err) => {
           Swal.fire({
@@ -99,7 +105,7 @@ export class TarefasDetalheComponent {
         }
       });
     }
-    this.retorno.emit(this.tarefa)
+    
   }
 
   formatarData(data: Date): string {

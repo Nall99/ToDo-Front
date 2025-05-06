@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
+import { Login } from '../../../auth/login';
+import { LoginService } from '../../../auth/login.service';
 
 @Component({
   selector: 'app-login',
@@ -11,17 +13,32 @@ import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  username!: string;
-  senha!: string;
+  login: Login = new Login();
+
+  loginService = inject(LoginService);
 
   rota = inject(Router)
 
+  constructor() {
+    this.loginService.removerToken();
+  }
+
   logar() {
     // Redirecionar para a página principal
-    console.log('Login:', this.username);
-    console.log('Senha:', this.senha);
-    if(this.username === 'admin' && this.senha === 'admin') {
-      this.rota.navigate(['/principal/tarefas']); // Redirecionar para a página de tarefas
+    this.loginService.logar(this.login).subscribe({
+      next: (token) => {
+        if (token) {
+          this.loginService.addToken(token);
+          if (this.loginService.hasPermission("ADMIN")){
+            this.rota.navigate(['/principal/tarefas']);
+          }
+      }else{
+        alert('Usuário ou senha inválidos');
+      }
+    },
+    error: (error) => {
+      alert('Deu erro meu fi');
     }
+  })
   }
 }

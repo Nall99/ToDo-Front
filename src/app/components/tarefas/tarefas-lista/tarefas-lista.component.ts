@@ -18,7 +18,7 @@ import { TarefaService } from '../../../services/tarefa.service';
 export class TarefasListaComponent {
   lista: Tarefa[] = [] 
   statusLista: string[] = ['A fazer', 'Fazendo', 'Concluído'];
-  tarefaEdit: Tarefa = new Tarefa(0, '', '', new Date(), new Date(), '');
+  tarefaEdit: Tarefa = new Tarefa();
 
   atualDragTarefa!: Tarefa;
   statusPag!: string; 
@@ -50,7 +50,6 @@ export class TarefasListaComponent {
     }else {
       this.statusPag = 'tarefas';
     }
-    console.log(this.statusPag);
   }
 
   buscarTodos(){
@@ -69,7 +68,9 @@ export class TarefasListaComponent {
   }
 
   adicionarTarefa(status: string) {
-    this.tarefaEdit = new Tarefa(0, '', '', new Date(), null, status);
+    this.tarefaEdit = new Tarefa();
+    this.tarefaEdit.status = status;
+    console.log(this.tarefaEdit);
     this.modalRef = this.modalService.open(this.modalTarefaDetalhe);
   }
   editar(tarefa: Tarefa) {
@@ -112,8 +113,7 @@ export class TarefasListaComponent {
       this.lista[index] = tarefa;
     }
     else {
-      tarefa.id = this.lista.length + 1;
-      this.lista.push(tarefa);
+      this.buscarTodos();
     }
     this.modalRef.close();
   }
@@ -137,11 +137,28 @@ export class TarefasListaComponent {
       this.posicaoSombra = null;
       const index = this.lista.findIndex(t => t.id === this.atualDragTarefa.id);
       if (index !== -1) {
+        if ( this.atualDragTarefa.status !== status) {
           this.lista[index].status = status;
           this.atualDragTarefa.status = status;
           const tarefa = this.lista.splice(index, 1)[0];
+
+          tarefa.status = status;
+          this.tarefaService.atualizar(tarefa, tarefa.id).subscribe({
+              next: (mensagem) => {
+                  console.log(mensagem);
+              },
+              error: (err) => {
+                  Swal.fire({
+                      title: 'Erro ao atualizar a tarefa',
+                      icon: 'error',
+                      confirmButtonText: 'OK'
+                  });
+              }
+          });
           this.lista.push(tarefa);
+        }
       }
+
   }
   formatarData(data: Date): string {
       if (data == null) {
